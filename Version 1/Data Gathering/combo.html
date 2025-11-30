@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #f1f1f1;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 32, 39, 0.9);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    header nav a {
+      color: #00ffff;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .controls {
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #1e2b38;
+    }
+
+    .controls input,
+    .controls select,
+    .controls label {
+      color: #fff;
+      background: #2c3e50;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .plot-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .plot-card {
+      background: linear-gradient(145deg, #2c5364, #203a43);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .plot-card iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .highlight {
+      background-color: yellow;
+      color: black;
+      font-weight: bold;
+    }
+
+    .plot-card {
+      color: black;
+      border: 2px solid #dcdcdc;
+      padding: 0;
+      margin: 15px;
+      border-radius: 10px;
+      transition: transform 0.3s;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .plot-card:hover {
+      transform: scale(1.05);
+    }
+
+    .plot-thumbnail {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .view-plot-btn {
+      background: #2b87b7;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .view-plot-btn:hover {
+      background: #1a5f80;
+    }
+
+    .mode-toggle-container {
+      position: absolute;
+      top: 80px;
+      right: 10px;
+      background-color: #2c3e50;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-label {
+      margin-right: 10px;
+      color: white;
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: #1a5f80;
+    }
+
+    body.dark-theme {
+      background-color: #121212;
+      color: white;
+    }
+
+    body.dark-theme .accordion-button {
+      background-color: #333;
+      color: white;
+    }
+
+    body.dark-theme .accordion-item {
+      background-color: #222;
+      color: white;
+    }
+
+    body.dark-theme .plot-card {
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Crypto Price & Volume Dashboard</h1>
+    <nav>
+      <a href="comparison.html" target="_blank">Compare Coins</a>
+    </nav>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchBar" placeholder="Search coin..." onkeyup="filterPlots()" />
+
+    <label for="sortSelect">Sort:</label>
+    <select id="sortSelect" onchange="sortPlots()">
+      <option value="az">A to Z</option>
+      <option value="za">Z to A</option>
+    </select>
+
+    <label for="themeSelect">Theme:</label>
+    <select id="themeSelect" onchange="changeTheme()">
+      <option value="all">Price + Volume + Events</option>
+      <option value="price">Price only</option>
+      <option value="volume">Volume only</option>
+    </select>
+    
+  </div>
+  <div class="mode-toggle-container">
+    <label for="themeToggle" class="theme-label">Switch Theme</label>
+    <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+  </div>
+
+
+  <div class="plot-grid" id="plotContainer">
+    <div class="plot-card" id="plot-card-1">
+      <div class="plot-info">
+        <h4>Bitcoin</h4>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const plots = [
+      "bitcoin", "ethereum", "binancecoin", "cardano", "litecoin",
+      "dogecoin", "shiba_inu", "pepe", "floki", "bonk"
+    ];
+
+    const container = document.getElementById('plotContainer');
+
+    function renderPlots() {
+      container.innerHTML = '';
+      plots.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'plot-card';
+        card.setAttribute('data-name', name);
+        card.innerHTML = `
+          <h3>${name.replace(/_/g, ' ').toUpperCase()}</h3>
+          <iframe src="plots_with_volume_using_plotly/${name}_price_volume_plot.html"></iframe>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterPlots() {
+      const input = document.getElementById('searchBar').value.toLowerCase();
+      document.querySelectorAll('.plot-card').forEach(card => {
+        const name = card.getAttribute('data-name');
+        const match = name.includes(input);
+        card.style.display = match ? 'block' : 'none';
+        const title = card.querySelector('h3');
+        if (match && input) {
+          const regex = new RegExp(`(${input})`, 'gi');
+          title.innerHTML = name.replace(/_/g, ' ').toUpperCase().replace(regex, '<span class="highlight">$1</span>');
+        } else {
+          title.innerHTML = name.replace(/_/g, ' ').toUpperCase();
+        }
+      });
+    }
+
+    function sortPlots() {
+      const val = document.getElementById('sortSelect').value;
+      plots.sort((a, b) => val === 'az' ? a.localeCompare(b) : b.localeCompare(a));
+      renderPlots();
+    }
+
+    function changeTheme() {
+      const val = document.getElementById('themeSelect').value;
+      alert('Theme change feature is under development. You selected: ' + val);
+    }
+
+    function toggleTheme() {
+      var element = document.body;
+      element.classList.toggle("dark-theme");
+    }
+
+
+    renderPlots();
+  </script>
+</body>
+
+</html>

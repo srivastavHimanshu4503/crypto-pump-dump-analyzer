@@ -1,0 +1,185 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Pump & Dump Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            color: #fff;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        select,
+        input[type="number"],
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            margin: 5px;
+        }
+
+        select,
+        input[type="number"] {
+            width: 250px;
+        }
+
+        button {
+            background-color: #1abc9c;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Welcome to the Crypto Pump & Dump Analyzer</h1>
+    <form id="analysisForm">
+        <div class="form-group">
+            <label>Select Coin:</label><br />
+            <select id="coinSelect" required>
+                <option value="bitcoin">Bitcoin</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="dogecoin">Dogecoin</option>
+                <option value="binancecoin">Binancecoin</option>
+                <option value="bonk">Bonk</option>
+                <option value="cardano">Cardano</option>
+                <option value="floki">Floki</option>
+                <option value="litecoin">Litecoin</option>
+                <option value="pepe">Pepe</option>
+                <option value="shiba_inu">Shiba Inu</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Pump Criteria:</label><br />
+            Price Increase %: <input type="number" id="pumpPrice" value="5" min="0" step="0.1" /> <br />
+            Volume Increase %: <input type="number" id="pumpVolume" value="50" min="0" step="0.1" />
+        </div>
+
+        <div class="form-group">
+            <label>Dump Criteria:</label><br />
+            Price Decrease %: <input type="number" id="dumpPrice" value="5" min="0" step="0.1" /> <br />
+            Volume Increase %: <input type="number" id="dumpVolume" value="50" min="0" step="0.1" />
+        </div>
+
+        <button type="submit" onclick="analyze()">Analyze Coin</button>
+    </form>
+    <script>
+        function analyze() {
+            document.getElementById("analysisForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const coin = document.getElementById("coinSelect").value;
+                const pumpPrice = document.getElementById("pumpPrice").value;
+                const pumpVolume = document.getElementById("pumpVolume").value;
+                const dumpPrice = document.getElementById("dumpPrice").value;
+                const dumpVolume = document.getElementById("dumpVolume").value;
+
+                // Redirect to backend with parameters
+                const query = `coin=${coin}&pump_price=${pumpPrice}&pump_volume=${pumpVolume}&dump_price=${dumpPrice}&dump_volume=${dumpVolume}`;
+                window.location.href = `https://himanshu4503srivastav24055sita.pythonanywhere.com/analyze?${query}`;
+            });
+        }
+    </script>
+</body>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Pump & Dump Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <canvas id="background-canvas"></canvas>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1><i class="fas fa-search-dollar"></i> Crypto Pump & Dump Analyzer</h1>
+                <p class="subtitle">Detect suspicious price and volume movements in cryptocurrency markets</p>
+            </div>
+            
+            <form id="analysisForm">
+                <div class="form-group">
+                    <label><i class="fas fa-coins"></i> Select Coin:</label>
+                    <select id="coinSelect" required>
+                        <option value="bitcoin">Bitcoin (BTC)</option>
+                        <option value="ethereum">Ethereum (ETH)</option>
+                        <option value="dogecoin">Dogecoin (DOGE)</option>
+                        <option value="binancecoin">Binance Coin (BNB)</option>
+                        <option value="bonk">Bonk (BONK)</option>
+                        <option value="cardano">Cardano (ADA)</option>
+                        <option value="floki">Floki (FLOKI)</option>
+                        <option value="litecoin">Litecoin (LTC)</option>
+                        <option value="pepe">Pepe (PEPE)</option>
+                        <option value="shiba_inu">Shiba Inu (SHIB)</option>
+                    </select>
+                </div>
+
+                <div class="criteria-container">
+                    <div class="form-group pump-group">
+                        <label><i class="fas fa-chart-line"></i> Pump Criteria:</label>
+                        <div class="input-group">
+                            <span>Price Increase %:</span>
+                            <input type="number" id="pumpPrice" value="5" min="0" step="0.1" />
+                        </div>
+                        <div class="input-group">
+                            <span>Volume Increase %:</span>
+                            <input type="number" id="pumpVolume" value="50" min="0" step="0.1" />
+                        </div>
+                    </div>
+
+                    <div class="form-group dump-group">
+                        <label><i class="fas fa-chart-line fa-flip-vertical"></i> Dump Criteria:</label>
+                        <div class="input-group">
+                            <span>Price Decrease %:</span>
+                            <input type="number" id="dumpPrice" value="5" min="0" step="0.1" />
+                        </div>
+                        <div class="input-group">
+                            <span>Volume Increase %:</span>
+                            <input type="number" id="dumpVolume" value="50" min="0" step="0.1" />
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="cta-button" id="analyzeBtn" onclick="analyze()">
+                    <span><i class="fas fa-chart-bar"></i> Analyze Coin</span>
+                </button>
+            </form>
+            
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Analyze historical cryptocurrency data to identify potential pump & dump patterns based on your custom criteria</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="background.js"></script>
+    <script src="interaction.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

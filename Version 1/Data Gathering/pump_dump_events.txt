@@ -1,0 +1,24 @@
+binancecoin:
+
+bitcoin:
+
+bonk:
+  Pump: 2025-01-18 -> Dump: 2025-01-21
+
+cardano:
+  Pump: 2025-03-03 -> Dump: 2025-03-04
+
+dogecoin:
+
+ethereum:
+
+floki:
+  Pump: 2024-05-28 -> Dump: 2024-05-31
+
+litecoin:
+  Pump: 2025-01-18 -> Dump: 2025-01-20
+
+pepe:
+
+shiba_inu:
+

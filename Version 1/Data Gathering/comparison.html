@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Comparison Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            background-clip:content-box;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        .controls {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .controls input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .checkbox-group label {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkbox-group label:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        #plots {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 20px;
+        }
+
+        .chart-container {
+            width: 40%;
+            min-width: 360px;
+            background: linear-gradient(145deg, #141e30, #243b55);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Crypto Comparison Dashboard</h1>
+
+    <!-- Controls -->
+    <div class="controls">
+        <input type="text" id="searchBox" placeholder="Search for a coin..." oninput="filterCoins()">
+        <div class="checkbox-group">
+            <label><input type="checkbox" id="bitcoin" onchange="updateCharts()"> Bitcoin</label>
+            <label><input type="checkbox" id="dogecoin" onchange="updateCharts()"> Dogecoin</label>
+            <label><input type="checkbox" id="ethereum" onchange="updateCharts()"> Ethereum</label>
+            <label><input type="checkbox" id="shiba_inu" onchange="updateCharts()"> Shiba Inu</label>
+            <label><input type="checkbox" id="cardano" onchange="updateCharts()"> Cardano</label>
+            <label><input type="checkbox" id="litecoin" onchange="updateCharts()"> Litecoin</label>
+            <label><input type="checkbox" id="floki" onchange="updateCharts()"> Floki</label>
+            <label><input type="checkbox" id="pepe" onchange="updateCharts()"> Pepe</label>
+            <label><input type="checkbox" id="bonk" onchange="updateCharts()"> Bonk</label>
+        </div>
+    </div>
+
+    <!-- Plots -->
+    <div id="plots"></div>
+
+    <script>
+        const coinData = {
+            "bitcoin": "plots_with_volume_using_plotly/bitcoin_price_volume_plot.html",
+            "dogecoin": "plots_with_volume_using_plotly/dogecoin_price_volume_plot.html",
+            "ethereum": "plots_with_volume_using_plotly/ethereum_price_volume_plot.html",
+            "shiba_inu": "plots_with_volume_using_plotly/shiba_inu_price_volume_plot.html",
+            "cardano": "plots_with_volume_using_plotly/cardano_price_volume_plot.html",
+            "litecoin": "plots_with_volume_using_plotly/litecoin_price_volume_plot.html",
+            "floki": "plots_with_volume_using_plotly/floki_price_volume_plot.html",
+            "pepe": "plots_with_volume_using_plotly/pepe_price_volume_plot.html",
+            "bonk": "plots_with_volume_using_plotly/bonk_price_volume_plot.html"
+        };
+
+        function filterCoins() {
+            const searchTerm = document.getElementById("searchBox").value.toLowerCase();
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            checkboxes.forEach((checkbox) => {
+                const label = checkbox.parentElement.textContent.toLowerCase();
+                checkbox.parentElement.style.display = label.includes(searchTerm) ? 'inline-block' : 'none';
+            });
+        }
+
+        function updateCharts() {
+            const plotsContainer = document.getElementById("plots");
+            plotsContainer.innerHTML = "";
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+            checkboxes.forEach((checkbox) => {
+                const coin = checkbox.id;
+                const container = document.createElement("div");
+                container.className = "chart-container";
+                const iframe = document.createElement("iframe");
+                iframe.src = coinData[coin];
+                container.appendChild(iframe);
+                plotsContainer.appendChild(container);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ coin }} Analysis - Crypto Pump & Dump Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analyze_result.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="cursor-follower"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i data-feather="activity" class="pulse"></i>
+                <span class="logo-text">CryptoAnalytics</span>
+            </div>
+            <h1 class="title" data-text="{{ coin }}">{{ coin }} <span class="highlight">Analysis</span></h1>
+            <p class="subtitle">Pump & Dump Detection Dashboard</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="card summary-card">
+                <div class="card-header">
+                    <i data-feather="bar-chart-2"></i>
+                    <h2>Summary</h2>
+                </div>
+                <div class="card-content">
+                    <p class="stat-highlight">{{ summary }}</p>
+                    <div class="event-lists">
+                        <div class="event-column">
+                            <h3><i data-feather="trending-up"></i> Pumps</h3>
+                            <ul class="events-list pumps">
+                                {% for pump in notable_periods.Pumps %}
+                                <li class="event-item pump">
+                                    <span class="event-date">{{ pump }}</span>
+                                    <span class="event-indicator"><i data-feather="arrow-up-circle"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="event-column">
+                            <h3><i data-feather="trending-down"></i> Dumps</h3>
+                            <ul class="events-list dumps">
+                                {% for dump in notable_periods.Dumps %}
+                                <li class="event-item dump">
+                                    <span class="event-date">{{ dump }}</span>
+                                    <span class="event-indicator"><i data-feather="arrow-down-circle"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="graph-container">
+                <div class="card graph-card">
+                    <div class="card-header">
+                        <i data-feather="dollar-sign"></i>
+                        <h2>Price Analysis</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="graph-wrapper">
+                            <iframe src="{{ price_graph_url }}" frameborder="0" class="graph-iframe"></iframe>
+                        </div>
+                        <div class="description">
+                            <h3>Price Insights</h3>
+                            <p>{{ price_description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card graph-card">
+                    <div class="card-header">
+                        <i data-feather="activity"></i>
+                        <h2>Volume Analysis</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="graph-wrapper">
+                            <iframe src="{{ volume_graph_url }}" frameborder="0" class="graph-iframe"></iframe>
+                        </div>
+                        <div class="description">
+                            <h3>Volume Insights</h3>
+                            <p>{{ volume_description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card graph-card full-width">
+                    <div class="card-header">
+                        <i data-feather="trending-up"></i>
+                        <h2>Combined Analysis</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="graph-wrapper">
+                            <iframe src="{{ combined_graph_url }}" frameborder="0" class="graph-iframe"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <a href="/" class="back-link">
+                <i data-feather="arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{{ url_for('static', filename='js/analyze_result.js') }}"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
